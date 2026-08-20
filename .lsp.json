@@ -1,0 +1,9 @@
+{
+    "typescript": {
+        "command": [
+            "npx",
+            "typescript-language-server",
+            "--stdio"
+        ]
+    }
+}

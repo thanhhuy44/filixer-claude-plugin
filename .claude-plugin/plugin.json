@@ -1,0 +1,8 @@
+{
+  "name": "Filixer Claude Plugin",
+  "description": "Comprehensive fullstack development toolkit for Next.js, oRPC, Drizzle ORM, Shadcn UI, Ant Design, Better-Auth, and Playwright.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Filixer"
+  }
+}
