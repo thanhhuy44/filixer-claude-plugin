@@ -39,6 +39,17 @@ The plugin configures 3 specialized Model Context Protocol (MCP) servers:
 - **`tanstack`**: TanStack Query oRPC integration, query invalidation, and TanStack Data Table specs.
 - **`tanstack-router`**: SPA client-side routing, type-safe file routes, search params validation & loaders.
 - **`zustand`**: Client-side global state management, persistent storage, and modular store patterns.
+- **`custom-hooks`**: Essential custom React hooks for auth (`useAuth`), UI disclosure (`useDisclosure`), input debouncing (`useDebounce`), responsive mobile detection (`useIsMobile`), and copy clipboard.
+
+---
+
+## 🪝 Claude Code Lifecycle Hooks
+
+The plugin configures automated lifecycle hooks in `settings.json` and `hooks/`:
+
+- **`SessionStart`** (`hooks/session-start.js`): Checks workspace readiness (`package.json`, `node_modules`, `.env`).
+- **`PreToolUse`** (`hooks/pre-tool-use.js`): Intercepts dangerous Bash commands (`git push --force`, `rm -rf /`, `DROP DATABASE`).
+- **`PostToolUse`** (`hooks/post-tool-use.js`): Automatically formats `.ts`, `.tsx`, and `.json` files via Prettier after edits.
 
 ---
 

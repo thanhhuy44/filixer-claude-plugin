@@ -130,15 +130,15 @@ export const SignInCard = (): React.ReactNode => {
 ### 2. User Profile Card (`src/features/auth/components/profile-card.tsx`)
 
 ```tsx
-import { authClient } from '@/lib/auth-client'
+import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export const ProfileCard = (): React.ReactNode => {
-  const { data: session, isPending } = authClient.useSession()
+  const { user, isAuthenticated, isLoading, signOut } = useAuth()
 
-  if (isPending) return <div>Loading profile...</div>
-  if (!session) return <div>Not authenticated</div>
+  if (isLoading) return <div>Loading profile...</div>
+  if (!isAuthenticated || !user) return <div>Not authenticated</div>
 
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -148,15 +148,15 @@ export const ProfileCard = (): React.ReactNode => {
       <CardContent className="space-y-4">
         <div>
           <p className="text-sm text-gray-500">Name</p>
-          <p className="font-medium">{session.user.name}</p>
+          <p className="font-medium">{user.name}</p>
         </div>
         <div>
           <p className="text-sm text-gray-500">Email</p>
-          <p className="font-medium">{session.user.email}</p>
+          <p className="font-medium">{user.email}</p>
         </div>
         <Button
           variant="destructive"
-          onClick={() => authClient.signOut()}
+          onClick={() => signOut()}
           className="w-full"
         >
           Sign Out
