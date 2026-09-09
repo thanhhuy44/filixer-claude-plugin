@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-marketplace.json",
+  "name": "filixer-marketplace",
+  "description": "Official marketplace for Filixer fullstack development toolkit and plugins.",
+  "owner": {
+    "name": "Filixer"
+  },
+  "plugins": [
+    {
+      "name": "filixer",
+      "source": "./",
+      "description": "Comprehensive fullstack development toolkit for Next.js, oRPC, Drizzle ORM, Shadcn UI, Ant Design, Better-Auth, TanStack, and Playwright."
+    }
+  ]
+}
