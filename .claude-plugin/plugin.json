@@ -3,13 +3,14 @@
   "name": "filixer",
   "displayName": "Filixer Fullstack Toolkit",
   "version": "1.0.0",
-  "description": "Comprehensive fullstack development toolkit for Next.js, oRPC, Drizzle ORM, Shadcn UI, Ant Design, Better-Auth, TanStack, and Playwright.",
+  "description": "Comprehensive fullstack development toolkit for React SPA / TanStack Start (SSR support), oRPC, Drizzle ORM, Shadcn UI, Ant Design, Better-Auth, TanStack, and Playwright.",
   "author": {
     "name": "Filixer"
   },
   "license": "MIT",
   "keywords": [
-    "nextjs",
+    "react-spa",
+    "tanstack-start",
     "orpc",
     "drizzle-orm",
     "shadcn-ui",

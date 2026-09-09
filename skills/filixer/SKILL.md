@@ -1,6 +1,6 @@
 ---
 name: filixer
-description: Core architecture guidelines and task routing matrix for building fullstack applications with React 19, Next.js, TanStack Start/Router/Query, oRPC, Drizzle ORM, Shadcn UI, Ant Design, Better-Auth, Zustand, and Playwright. Use when architecting features, setting up conventions, or coordinating sub-agents.
+description: Core architecture guidelines and task routing matrix for building fullstack applications with React 19 SPA, TanStack Start (SSR support), TanStack Router/Query, oRPC, Drizzle ORM, Shadcn UI, Ant Design, Better-Auth, Zustand, and Playwright. Use when architecting features, setting up conventions, or coordinating sub-agents.
 ---
 
 # Filixer Fullstack Architecture & Task Routing

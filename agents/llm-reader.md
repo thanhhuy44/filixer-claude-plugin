@@ -16,7 +16,7 @@ You are responsible for dynamically discovering, fetching, and analyzing officia
 Do NOT rely on hardcoded URLs. Instead, dynamically discover official `llms.txt` endpoints following this workflow:
 
 ### 1. Identify Target Technologies
-Analyze the task description, dependencies, or prompt to extract the target libraries/frameworks (e.g., TanStack, Shadcn UI, Better-Auth, oRPC, Zod, Drizzle ORM, Next.js, etc.).
+Analyze the task description, dependencies, or prompt to extract the target libraries/frameworks (e.g., TanStack Start/Router/Query, Shadcn UI, Better-Auth, oRPC, Zod, Drizzle ORM, React, etc.).
 
 ### 2. Search & Locate `llms.txt`
 - Use **`WebSearch`** to search for the official `llms.txt` file of the target technology:

@@ -1,6 +1,6 @@
 # Filixer Claude Plugin — Agent Operating Guidelines
 
-This repository is the official **Filixer Fullstack Plugin** for Claude Code, equipping agents with specialized sub-agents, skills, slash commands, MCP servers, and lifecycle hooks for Next.js, TanStack, oRPC, Drizzle ORM, Shadcn UI, Ant Design, Better-Auth, and Playwright.
+This repository is the official **Filixer Fullstack Plugin** for Claude Code, equipping agents with specialized sub-agents, skills, slash commands, MCP servers, and lifecycle hooks for React SPA / TanStack Start (SSR support), TanStack, oRPC, Drizzle ORM, Shadcn UI, Ant Design, Better-Auth, and Playwright.
 
 ---
 
@@ -56,7 +56,7 @@ TASK ──► RESEARCH ──► EXPLORE ──► PLAN ──► IMPLEMENT ─
 3. **`playwright`** (`@playwright/mcp@latest`):
    - Used by `tester-engineer` for browser navigation, snapshot verification, console error detection, and visual regression.
 4. **`context7`**:
-   - Use `mcp_context7_resolve_library_id` and `mcp_context7_query_docs` to fetch up-to-date documentation for Next.js, React, TanStack, oRPC, Better-Auth, Drizzle, and Tailwind.
+   - Use `mcp_context7_resolve_library_id` and `mcp_context7_query_docs` to fetch up-to-date documentation for React, TanStack Start/Router, oRPC, Better-Auth, Drizzle, Shadcn, and Tailwind.
 
 ---
 

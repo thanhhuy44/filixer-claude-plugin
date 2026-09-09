@@ -9,7 +9,7 @@
     {
       "name": "filixer",
       "source": "./",
-      "description": "Comprehensive fullstack development toolkit for Next.js, oRPC, Drizzle ORM, Shadcn UI, Ant Design, Better-Auth, TanStack, and Playwright."
+      "description": "Comprehensive fullstack development toolkit for React SPA / TanStack Start (SSR support), oRPC, Drizzle ORM, Shadcn UI, Ant Design, Better-Auth, TanStack, and Playwright."
     }
   ]
 }

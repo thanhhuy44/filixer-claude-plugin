@@ -25,7 +25,7 @@ Comprehensive end-to-end fullstack workflow coordinating all specialized sub-age
 - Gather full feature requirements: database persistence, API business logic, UI user experience, authentication, and E2E validation.
 
 ### 2. RESEARCH
-- Inspect `package.json` for fullstack dependencies (Next.js/Vite, TanStack, oRPC, Drizzle, Shadcn UI, AntD, Better-Auth, Playwright).
+- Inspect `package.json` for fullstack dependencies (React SPA / TanStack Start, TanStack Router/Query, oRPC, Drizzle, Shadcn UI, AntD, Better-Auth, Playwright).
 - Spawn **`llm-reader`** or use **`context7` MCP** to fetch official specs for relevant technologies.
 - Inspect changelogs and existing project patterns.
 

@@ -137,7 +137,7 @@ The workflow accepts an optional mode argument `$ARGUMENTS`:
 
 ### Step 2: RESEARCH
 Gather accurate context before writing any code:
-1. **Installed Versions**: Read `package.json` to verify framework versions (React 18/19, Next.js, TanStack, oRPC, Drizzle, Shadcn UI, AntD, Better-Auth, Playwright).
+1. **Installed Versions**: Read `package.json` to verify framework versions (React 18/19 SPA / TanStack Start, TanStack Query/Router, oRPC, Drizzle, Shadcn UI, AntD, Better-Auth, Playwright).
 2. **Official llms.txt & Docs**:
    - Spawn sub-agent **`llm-reader`** or query **`context7` MCP** (`mcp_context7_resolve_library_id` ➔ `mcp_context7_query_docs`).
    - For Ant Design: Run `antd info <Component> --format json` or use `antd` MCP.

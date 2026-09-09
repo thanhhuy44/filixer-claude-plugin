@@ -1,6 +1,6 @@
 # Filixer Claude Plugin (`filixer`)
 
-A comprehensive fullstack development toolkit for Claude Code, empowering rapid development with **Next.js**, **oRPC**, **Drizzle ORM**, **Shadcn UI**, **Ant Design**, **Better-Auth**, **TanStack Query/Router/Table**, and **Playwright**.
+A comprehensive fullstack development toolkit for Claude Code, empowering rapid development with **React SPA / TanStack Start (SSR support)**, **oRPC**, **Drizzle ORM**, **Shadcn UI**, **Ant Design**, **Better-Auth**, **TanStack Query/Router/Table**, and **Playwright**.
 
 ---
 
