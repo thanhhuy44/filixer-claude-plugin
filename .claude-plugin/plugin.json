@@ -1,8 +1,24 @@
 {
-  "name": "Filixer Claude Plugin",
-  "description": "Comprehensive fullstack development toolkit for Next.js, oRPC, Drizzle ORM, Shadcn UI, Ant Design, Better-Auth, and Playwright.",
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "filixer",
+  "displayName": "Filixer Fullstack Toolkit",
   "version": "1.0.0",
+  "description": "Comprehensive fullstack development toolkit for Next.js, oRPC, Drizzle ORM, Shadcn UI, Ant Design, Better-Auth, TanStack, and Playwright.",
   "author": {
     "name": "Filixer"
-  }
+  },
+  "license": "MIT",
+  "keywords": [
+    "nextjs",
+    "orpc",
+    "drizzle-orm",
+    "shadcn-ui",
+    "ant-design",
+    "better-auth",
+    "tanstack",
+    "playwright"
+  ],
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json",
+  "lspServers": "./.lsp.json"
 }

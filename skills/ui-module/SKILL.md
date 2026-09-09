@@ -41,6 +41,9 @@ src/features/<feature_name>/
    - Keep page-level components clean in `index.tsx` by delegating actual view rendering to modular components in `components/`.
    - All state sharing across sub-components should pass through `use<FeatureName>Context()`.
 
+5. **Mandatory Playwright E2E Tests**:
+   - When creating or modifying a feature module, author an accompanying Playwright E2E test in `e2e/<feature_name>.spec.ts` to test mounting, interactions, form submission, and error display.
+
 ## 3. Code Templates
 
 ### Context Template (`src/features/<feature-name>/context/index.tsx`)

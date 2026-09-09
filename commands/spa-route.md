@@ -30,7 +30,7 @@ export const Route = createFileRoute('/<path>')({
   component: RouteComponent,
 })
 
-function RouteComponent() {
+const RouteComponent = () => {
   const { query } = Route.useSearch()
 
   return (

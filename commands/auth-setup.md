@@ -22,51 +22,51 @@ Setup Better-Auth with Drizzle ORM adapter and oRPC `protectedProcedure` authent
 ### 1. Server Auth (`src/lib/auth.ts`)
 
 ```ts
-import { betterAuth } from 'better-auth'
-import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import { db } from '@/db'
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { db } from "@/db";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
-    provider: 'pg',
+    provider: "pg",
   }),
   emailAndPassword: {
     enabled: true,
   },
-})
+});
 ```
 
 ### 2. Client Auth (`src/lib/auth-client.ts`)
 
 ```ts
-import { createAuthClient } from 'better-auth/react'
+import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-})
+  baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+});
 
-export const { useSession, signIn, signUp, signOut } = authClient
+export const { useSession, signIn, signUp, signOut } = authClient;
 ```
 
 ### 3. oRPC Auth Middleware (`src/orpc/procedure.ts`)
 
 ```ts
-import { os, ORPCError } from '@orpc/server'
-import { auth } from '@/lib/auth'
+import { os, ORPCError } from "@orpc/server";
+import { auth } from "@/lib/auth";
 
-export const publicProcedure = os
+export const publicProcedure = os;
 
 export const protectedProcedure = os.use(async ({ context, next }) => {
   // Assume context includes incoming request headers
   const session = await auth.api.getSession({
     headers: (context as { headers?: Headers }).headers ?? new Headers(),
-  })
+  });
 
   if (!session) {
     throw new ORPCError({
-      code: 'UNAUTHORIZED',
-      message: 'You must be logged in to perform this action',
-    })
+      code: "UNAUTHORIZED",
+      message: "You must be logged in to perform this action",
+    });
   }
 
   return next({
@@ -75,6 +75,6 @@ export const protectedProcedure = os.use(async ({ context, next }) => {
       user: session.user,
       session: session.session,
     },
-  })
-})
+  });
+});
 ```

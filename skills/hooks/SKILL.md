@@ -1,5 +1,5 @@
 ---
-name: custom-hooks
+name: hooks
 description: Essential custom React hooks guidelines for authentication, UI disclosure, input debouncing, mobile detection, and clipboard utilities in src/hooks/.
 ---
 

@@ -1,25 +1,27 @@
 {
-    "mcpServers": {
-        "antd": {
-            "command": "npx",
-            "args": [
-                "-y",
-                "@ant-design/cli",
-                "mcp"
-            ]
-        },
-        "playwright": {
-            "command": "npx",
-            "args": [
-                "@playwright/mcp@latest"
-            ]
-        },
-        "shadcn": {
-            "command": "npx",
-            "args": [
-                "shadcn@latest",
-                "mcp"
-            ]
-        }
+  "mcpServers": {
+    "antd": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@ant-design/cli",
+        "mcp"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ]
+    },
+    "shadcn": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "shadcn@latest",
+        "mcp"
+      ]
     }
+  }
 }

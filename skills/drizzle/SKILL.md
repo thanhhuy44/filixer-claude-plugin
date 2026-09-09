@@ -1,5 +1,5 @@
 ---
-name: drizzle-orm
+name: drizzle
 description: Standards and decision guide for Drizzle ORM, schema design, relations, drizzle-kit migrations, relational queries, and drizzle-zod integration.
 ---
 
@@ -9,6 +9,7 @@ Use this skill when designing database schemas, writing database migrations, bui
 
 ## 1. Core Guidelines
 
+- **Mandatory Sub-Agent Delegation**: For all database schema creation, modification, relations, and `drizzle-kit` migrations, delegate to sub-agent **`db-architect`**.
 - **Schema Organization**: Keep schemas modular under `src/db/schema/` and export them via `src/db/schema/index.ts`.
 - **Naming Conventions**: Use `camelCase` for TypeScript variables/fields and `snake_case` for database table/column names.
 - **Validation First**: Always generate Zod schemas via `drizzle-zod` (`createSelectSchema`, `createInsertSchema`) for use in oRPC procedures and form validations.

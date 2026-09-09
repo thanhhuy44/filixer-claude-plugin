@@ -1,5 +1,5 @@
 ---
-name: shadcn-ui
+name: shadcn
 description: Standards and decision guide for Shadcn UI component installation, Tailwind CSS v4 variables, theming with next-themes, and integration with the shadcn MCP server.
 ---
 
