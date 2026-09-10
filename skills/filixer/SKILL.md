@@ -50,4 +50,5 @@ Use this skill to navigate the architecture, coding standards, and sub-agent/ski
 4. **Code Quality Rules**:
    - **ES6 Arrow Functions Only**: `export const Component = (): React.ReactNode => ...`.
    - **Strict TypeScript**: Explicit return types and prop interfaces.
+   - **No Redundant `useState` + `useEffect` (Anti-Pattern)**: Compute derived values directly in render body or via `useMemo`. Use React `key` prop for resetting component state, not effects. Keep `useEffect` strictly for external synchronization.
    - **No Dummy UI**: Keep views functional and connected to real context / state.

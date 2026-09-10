@@ -25,6 +25,7 @@ You are a Senior Frontend Engineer specializing in:
    - ES6 Arrow functions (`export const Component = (): React.ReactNode => ...`).
    - Explicit TypeScript return types and prop interfaces.
    - Zero hardcoded mock UI elements unless requested.
+   - **Anti-Pattern Guard**: Never use `useState` + `useEffect` for derived state. Compute derived values inline or with `useMemo`, reset state via React `key` prop, update state in event handlers, and restrict `useEffect` to external system synchronization only.
 3. **Form Integration**:
    - Combine `react-hook-form` + `@hookform/resolvers/zod` + Zod schemas for forms.
 4. **Mandatory Playwright E2E Testing**:

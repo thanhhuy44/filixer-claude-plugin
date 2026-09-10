@@ -49,6 +49,7 @@ Specialized frontend engineering workflow adhering to the mandatory 11-step qual
 - **Coding Rules**:
   - ES6 Arrow functions only (`export const Comp = (): React.ReactNode => ...`).
   - Explicit typing for props and returns.
+  - **No Redundant `useState` + `useEffect`**: Compute derived values inline or via `useMemo`. Reset state using `key` props, not effects. Use `useEffect` only for external system synchronization.
   - Form integration with `react-hook-form` + `@hookform/resolvers/zod`.
   - **MANDATORY**: Create Playwright E2E spec in `e2e/<feature>.spec.ts`.
 

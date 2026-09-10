@@ -37,9 +37,10 @@ src/features/<feature_name>/
    - Throw an explicit error if custom context hook is used outside Provider:
      `throw new Error('use<FeatureName>Context must be used within ContextProvider')`.
 
-4. **Component Isolation**:
+4. **Component Isolation & Derived State**:
    - Keep page-level components clean in `index.tsx` by delegating actual view rendering to modular components in `components/`.
    - All state sharing across sub-components should pass through `use<FeatureName>Context()`.
+   - **Anti-Pattern Prevention**: Do NOT use `useState` + `useEffect` for derived state. Compute values inline or via `useMemo`, reset state with React `key` props, and handle user events inside event handlers.
 
 5. **Mandatory Playwright E2E Tests**:
    - When creating or modifying a feature module, author an accompanying Playwright E2E test in `e2e/<feature_name>.spec.ts` to test mounting, interactions, form submission, and error display.

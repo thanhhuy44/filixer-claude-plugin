@@ -107,6 +107,12 @@ src/features/<feature_name>/
 - **Zero Mock UI**: Do not leave fake placeholder buttons or mock data arrays in production code unless explicitly requested.
 - **Form Standard**: Always use `react-hook-form` + `@hookform/resolvers/zod` + Zod schema validation.
 - **Styling**: Tailwind CSS with `cn()` utility (`clsx` + `tailwind-merge`) in `src/lib/utils.ts`.
+- **No Redundant `useState` + `useEffect` (Anti-Pattern)**:
+  - **Do NOT** use `useState` + `useEffect` to sync or calculate derived state (e.g., `fullName`, `filteredList`). This causes unnecessary re-renders and subtle synchronization bugs.
+  - **Inline Calculation**: Compute derived values directly in the render body (e.g. `const fullName = \`${firstName} \${lastName}\``).
+  - **`useMemo`**: Wrap expensive calculations (filtering, sorting large datasets) in `useMemo(() => items.filter(...), [items, filter])`.
+  - **Reset State via React `key`**: Reset component state when a key entity changes by using a `key` prop (e.g. `<UserProfile key={userId} userId={userId} />`), NOT via `useEffect`.
+  - **Event Handlers**: Update state in response to user actions directly inside event handlers (`handleClick`), not inside `useEffect`. Reserve `useEffect` strictly for external system synchronization (subscriptions, DOM measurements, 3rd-party libs).
 
 ---
 
