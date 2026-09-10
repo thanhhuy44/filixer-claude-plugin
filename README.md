@@ -77,7 +77,7 @@ The plugin configures automated lifecycle hooks using `${CLAUDE_PLUGIN_ROOT}`:
 
 - **`SessionStart`** (`hooks/session-start.js`): Checks workspace readiness (`package.json`, `node_modules`, `.env`).
 - **`PreToolUse`** (`hooks/pre-tool-use.js`): Intercepts dangerous Bash commands (`git push --force`, `rm -rf /`, `DROP DATABASE`, `TRUNCATE TABLE`) and returns a blocking exit code 2.
-- **`PostToolUse`** (`hooks/post-tool-use.js`): Automatically formats `.ts`, `.tsx`, and `.json` files via Prettier after edits.
+- **`PostToolUse`** (`hooks/post-tool-use.js`): Automatically lints and formats code files (`.ts`, `.tsx`, `.js`, `.jsx`, `.json`, `.css`, etc.) via ESLint (`--fix`) and Prettier (`--write`) after edits or writes.
 
 ---
 
@@ -91,14 +91,84 @@ The plugin configures automated lifecycle hooks using `${CLAUDE_PLUGIN_ROOT}`:
 
 ---
 
-## 📦 Installation & Verification
+## 📦 Installation & Setup
 
-Test locally with Claude Code:
+### 🛒 Installing via Marketplace
+
+You can install the **Filixer Claude Plugin** directly from its official marketplace (`filixer-marketplace`):
+
+#### Step 1: Add the Marketplace
+Add the marketplace using GitHub repo shorthand, Git URL, or local path:
+
+- **Via Terminal CLI:**
+  ```bash
+  # From GitHub repository:
+  claude plugin marketplace add thanhhuy44/filixer-claude-plugin
+
+  # Or from local directory / file:
+  claude plugin marketplace add ./.claude-plugin/marketplace.json
+  ```
+- **Via In-Session Slash Command:**
+  ```text
+  /plugin marketplace add thanhhuy44/filixer-claude-plugin
+  ```
+
+#### Step 2: Install the `filixer` Plugin
+Once the marketplace is registered, install the `filixer` plugin:
+
+- **Via Terminal CLI:**
+  ```bash
+  claude plugin install filixer@filixer-marketplace
+  ```
+- **Via In-Session Slash Command:**
+  ```text
+  /plugin install filixer@filixer-marketplace
+  ```
+- **Via Interactive UI:**
+  Run `/plugin` in Claude Code, switch to the **Discover** tab, locate `filixer`, and press **Enter** to install.
+
+---
+
+### ⚡ Other Installation & Loading Options
+
+#### 1. Temporary / Sideloading (Single Session)
+Load the plugin for a single session without permanent installation:
 ```bash
 claude --plugin-dir ./
 ```
 
-Validate plugin structure:
+#### 2. Direct Path Installation
+Install permanently from a local path via CLI:
+```bash
+# Project scope (current project only)
+claude plugin install ./ --scope project
+
+# Global scope (all projects on your machine)
+claude plugin install ./ --scope global
+```
+
+#### 3. Declarative Configuration (`settings.json`)
+Declare the plugin and marketplace directly in `.claude/settings.json` (Project) or `~/.claude/settings.json` (Global):
+```json
+{
+  "extraKnownMarketplaces": {
+    "filixer-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "thanhhuy44/filixer-claude-plugin"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "filixer@filixer-marketplace": true
+  }
+}
+```
+
+---
+
+### 🔍 Plugin Validation
+To verify plugin integrity, manifest schemas, and hooks:
 ```bash
 claude plugin validate .
 ```
