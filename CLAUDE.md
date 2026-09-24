@@ -8,17 +8,17 @@ This repository is the official **Filixer Fullstack Plugin** for Claude Code, eq
 
 When handling tasks, agents must route actions to the appropriate specialized sub-agents, skills, or MCP tools:
 
-| Task Type | Primary Sub-Agent | Relevant Skill (`Skill` tool) | MCP Server / Tooling | Slash Command |
-| :--- | :--- | :--- | :--- | :--- |
-| **Unified Development Lifecycle** | Orchestrator | `workflow`, `dev-fullstack`, `dev-frontend`, `dev-backend` | `context7`, `playwright` | `/filixer:workflow` |
-| **Database & Schema** | `db-architect` | `drizzle` | - | `/drizzle-schema` |
-| **Backend & APIs** | `orpc-developer` | `tanstack` (Query oRPC) | - | `/crud-rpc`, `/auth-setup` |
-| **Feature UI & Forms** | `ui-builder` | `ui-module`, `shadcn`, `antd` | `shadcn`, `antd` | `/feature-ui`, `/form-zod`, `/feature-auth-ui` |
-| **SPA Routing** | `ui-builder` | `tanstack-router` | - | `/spa-route`, `/spa-auth-client` |
-| **Global State** | `ui-builder` | `zustand` | - | - |
-| **Custom Hooks** | `ui-builder` | `hooks` | - | - |
-| **Testing & QA** | `tester-engineer` | - | `playwright` | - |
-| **Docs & Official LLM Specs** | `llm-reader` | - | `context7`, `WebSearch`, `WebFetch` | - |
+| Task Type                         | Primary Sub-Agent | Relevant Skill (`Skill` tool)                              | MCP Server / Tooling                | Slash Command                                  |
+| :-------------------------------- | :---------------- | :--------------------------------------------------------- | :---------------------------------- | :--------------------------------------------- |
+| **Unified Development Lifecycle** | Orchestrator      | `workflow`, `dev-fullstack`, `dev-frontend`, `dev-backend` | `context7`, `playwright`            | `/filixer:workflow`                            |
+| **Database & Schema**             | `db-architect`    | `drizzle`                                                  | -                                   | `/drizzle-schema`                              |
+| **Backend & APIs**                | `orpc-developer`  | `tanstack` (Query oRPC)                                    | -                                   | `/crud-rpc`, `/auth-setup`                     |
+| **Feature UI & Forms**            | `ui-builder`      | `ui-module`, `shadcn`, `antd`                              | `shadcn`, `antd`                    | `/feature-ui`, `/form-zod`, `/feature-auth-ui` |
+| **SPA Routing**                   | `ui-builder`      | `tanstack-router`                                          | -                                   | `/spa-route`, `/spa-auth-client`               |
+| **Global State**                  | `ui-builder`      | `zustand`                                                  | -                                   | -                                              |
+| **Custom Hooks**                  | `ui-builder`      | `hooks`                                                    | -                                   | -                                              |
+| **Testing & QA**                  | `tester-engineer` | -                                                          | `playwright`                        | -                                              |
+| **Docs & Official LLM Specs**     | `llm-reader`      | -                                                          | `context7`, `WebSearch`, `WebFetch` | -                                              |
 
 ---
 
@@ -63,25 +63,33 @@ TASK ──► RESEARCH ──► EXPLORE ──► PLAN ──► IMPLEMENT ─
 ## 🏗️ Architecture & Directory Conventions
 
 ### 1. Feature-Driven UI Modules (`src/features/<feature-name>/`)
+
+The feature module pattern adapts to either **Ant Design (`antd`)** or **Shadcn UI (`shadcn`)** while sharing the exact same state machine, schema, and query factory:
+
 ```text
 src/features/<feature_name>/
-├── index.tsx                  # Feature Page component (wraps view in ContextProvider)
+├── index.tsx                  # Feature Page component (wraps content in ContextProvider)
+├── schema.ts                  # Zod validation schemas & body types (Shared Core)
+├── query.ts                   # TanStack Query & Mutation options factory (Shared Core)
 ├── context/
-│   └── index.tsx              # Context Provider & custom use<FeatureName>Context hook
-└── components/                # Focused sub-components consuming context
-    ├── list.tsx               # Minimal Data List / Table component
-    ├── card.tsx               # Minimal Detail View / Card component
-    ├── create-form.tsx        # Minimal Create Form component
-    └── delete.tsx             # Minimal Delete Confirmation modal/button
+│   └── index.tsx              # Feature Context Provider (action machine, current, queries/mutations) & hook (Shared Core)
+└── components/                # Modular sub-components consuming context
+    ├── table.tsx              # Data Table (AntD Table/DataTable OR Shadcn Table)
+    ├── columns.tsx            # Columns (AntD TableColumnsType OR TanStack ColumnDef)
+    ├── actions-cell.tsx       # Dropdown menu (AntD Dropdown OR Shadcn DropdownMenu)
+    └── modals/
+        └── upsert.tsx         # Unified Create/Edit Modal (AntD Modal OR Shadcn Dialog)
 ```
 
 ### 2. Backend & oRPC Procedures (`src/orpc/`)
+
 - Place routers in `src/orpc/router/<router_name>.ts` and compose into root router.
 - Use `publicProcedure` for unauthenticated endpoints; `protectedProcedure` for session-authenticated endpoints.
 - Standard CRUD methods: `getAll`, `getById`, `create`, `update`, `delete`.
 - Return errors using `ORPCError` with standard HTTP-equivalent codes (`UNAUTHORIZED`, `NOT_FOUND`, `BAD_REQUEST`).
 
 ### 3. Database & Schemas (`src/db/`)
+
 - **Mandatory Delegation**: Any creation, modification, or migration of database tables MUST be delegated to sub-agent **`db-architect`**.
 - Place table definitions in `src/db/schema/<entity_name>.ts` and export via `src/db/schema/index.ts`.
 - Database table & column names: `snake_case` (e.g. `user_profiles`, `created_at`).
@@ -90,11 +98,13 @@ src/features/<feature_name>/
 - Use `relations` for relational data mapping and Drizzle Relational Queries (`db.query.*`).
 
 ### 4. Client Routing (`src/routes/` for SPA)
+
 - Use `@tanstack/react-router` with `createFileRoute('/path')`.
 - Validate search parameters with Zod via `validateSearch`.
 - Preload data using `loader` functions.
 
 ### 5. Client State (`src/stores/` & `src/hooks/`)
+
 - Place domain-focused Zustand stores in `src/stores/<store-name>.ts` with atomic selectors and `persist` middleware when appropriate.
 - Place reusable custom hooks in `src/hooks/use-<name>.ts` (e.g. `useAuth`, `useDebounce`, `useIsMobile`, `useDisclosure`, `useCopyToClipboard`).
 

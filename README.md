@@ -26,6 +26,7 @@ TASK ──► RESEARCH ──► EXPLORE ──► PLAN ──► IMPLEMENT ─
 ### 🔌 MCP Servers (`.mcp.json`)
 
 The plugin bundles 3 specialized Model Context Protocol (MCP) servers:
+
 - **`antd`**: Ant Design component API metadata, docs, tokens, and linting (`@ant-design/cli mcp`).
 - **`shadcn`**: Component discovery, registry lookup, and interactive installation (`shadcn@latest mcp`).
 - **`playwright`**: Browser automation and E2E testing framework (`@playwright/mcp`).
@@ -40,16 +41,16 @@ The plugin bundles TypeScript / JavaScript Language Server (`typescript-language
 
 ## 📜 Slash Commands
 
-| Command | Description | Target Path |
-| :--- | :--- | :--- |
-| `/feature-ui` | Generates a base UI feature module pattern | `src/features/<feature_name>/` |
-| `/crud-rpc` | Generates a type-safe oRPC CRUD Router | `src/orpc/router/<router_name>.ts` |
-| `/drizzle-schema` | Generates Drizzle ORM table & `drizzle-zod` schemas | `src/db/schema/<entity_name>.ts` |
-| `/form-zod` | Generates React Hook Form + Zod Form component | `src/components/forms/<form_name>.tsx` |
-| `/auth-setup` | Configures Better-Auth server/client & oRPC auth middleware | `src/lib/auth.ts`, `src/orpc/procedure.ts` |
-| `/feature-auth-ui` | Generates standard Auth UI components (SignIn, Profile) | `src/features/auth/` |
-| `/spa-route` | Generates a type-safe TanStack Router client file route | `src/routes/<path>.tsx` |
-| `/spa-auth-client` | Configures Better-Auth React client for SPA apps | `src/lib/auth-client.ts` |
+| Command            | Description                                                                                                                                 | Target Path                                |
+| :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------ | :----------------------------------------- |
+| `/feature-ui`      | Generates a standard UI feature module adaptable for Ant Design or Shadcn UI (schema, queries, context action machine, table, upsert modal) | `src/features/<feature_name>/`             |
+| `/crud-rpc`        | Generates a type-safe oRPC CRUD Router                                                                                                      | `src/orpc/router/<router_name>.ts`         |
+| `/drizzle-schema`  | Generates Drizzle ORM table & `drizzle-zod` schemas                                                                                         | `src/db/schema/<entity_name>.ts`           |
+| `/form-zod`        | Generates React Hook Form + Zod Form component                                                                                              | `src/components/forms/<form_name>.tsx`     |
+| `/auth-setup`      | Configures Better-Auth server/client & oRPC auth middleware                                                                                 | `src/lib/auth.ts`, `src/orpc/procedure.ts` |
+| `/feature-auth-ui` | Generates standard Auth UI components (SignIn, Profile)                                                                                     | `src/features/auth/`                       |
+| `/spa-route`       | Generates a type-safe TanStack Router client file route                                                                                     | `src/routes/<path>.tsx`                    |
+| `/spa-auth-client` | Configures Better-Auth React client for SPA apps                                                                                            | `src/lib/auth-client.ts`                   |
 
 ---
 
@@ -60,7 +61,7 @@ The plugin bundles TypeScript / JavaScript Language Server (`typescript-language
 - **`dev-backend`**: Specialized Backend development workflow.
 - **`dev-fullstack`**: Specialized Fullstack development workflow.
 - **`filixer`**: Core architecture guidelines and task routing matrix.
-- **`ui-module`**: Standards & templates for feature-driven UI modules (`src/features/`).
+- **`ui-module`**: Standards & templates for feature-driven UI modules (`src/features/`), adaptable for Ant Design and Shadcn UI.
 - **`antd`**: Decision guide & offline CLI workflow for Ant Design v6, Pro, and AntD X.
 - **`drizzle`**: Database schema design, `relations`, `drizzle-kit` migrations, and `drizzle-zod`.
 - **`shadcn`**: Installation guidelines, Tailwind CSS v4 setup, and dark mode integration.
@@ -98,6 +99,7 @@ The plugin configures automated lifecycle hooks using `${CLAUDE_PLUGIN_ROOT}`:
 You can install the **Filixer Claude Plugin** directly from its official marketplace (`filixer-marketplace`):
 
 #### Step 1: Add the Marketplace
+
 Add the marketplace using GitHub repo shorthand, Git URL, or local path:
 
 - **Via Terminal CLI:**
@@ -114,6 +116,7 @@ Add the marketplace using GitHub repo shorthand, Git URL, or local path:
   ```
 
 #### Step 2: Install the `filixer` Plugin
+
 Once the marketplace is registered, install the `filixer` plugin:
 
 - **Via Terminal CLI:**
@@ -132,13 +135,17 @@ Once the marketplace is registered, install the `filixer` plugin:
 ### ⚡ Other Installation & Loading Options
 
 #### 1. Temporary / Sideloading (Single Session)
+
 Load the plugin for a single session without permanent installation:
+
 ```bash
 claude --plugin-dir ./
 ```
 
 #### 2. Direct Path Installation
+
 Install permanently from a local path via CLI:
+
 ```bash
 # Project scope (current project only)
 claude plugin install ./ --scope project
@@ -148,7 +155,9 @@ claude plugin install ./ --scope global
 ```
 
 #### 3. Declarative Configuration (`settings.json`)
+
 Declare the plugin and marketplace directly in `.claude/settings.json` (Project) or `~/.claude/settings.json` (Global):
+
 ```json
 {
   "extraKnownMarketplaces": {
@@ -168,7 +177,9 @@ Declare the plugin and marketplace directly in `.claude/settings.json` (Project)
 ---
 
 ### 🔍 Plugin Validation
+
 To verify plugin integrity, manifest schemas, and hooks:
+
 ```bash
 claude plugin validate .
 ```

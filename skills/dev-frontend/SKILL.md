@@ -10,6 +10,7 @@ Specialized frontend engineering workflow adhering to the mandatory 11-step qual
 ---
 
 ## 🚨 MANDATORY PLAYWRIGHT E2E TEST RULE
+
 > Whenever any UI component, page, form, or route is created or updated, you **MUST author corresponding Playwright E2E test specs** in `e2e/<feature>.spec.ts` (or `tests/e2e/<feature>.spec.ts`) and run them with `npx playwright test` or `playwright` MCP. A UI task is **NEVER** done without verified passing E2E tests.
 
 ---
@@ -17,9 +18,11 @@ Specialized frontend engineering workflow adhering to the mandatory 11-step qual
 ## 🚀 Specialized Frontend Workflow
 
 ### 1. TASK
+
 - Clarify UI requirements, target responsive viewports, state management needs, and backend API contracts.
 
 ### 2. RESEARCH
+
 - Check `package.json` for React version (18 vs 19), styling framework (Tailwind v4), UI libraries (Shadcn UI, Ant Design v6), and Playwright configuration (`playwright.config.ts`).
 - Use **`context7` MCP** or **`llm-reader`** agent for official docs:
   - TanStack Query / Table: `https://tanstack.com/llms.txt`
@@ -27,21 +30,26 @@ Specialized frontend engineering workflow adhering to the mandatory 11-step qual
 - For Ant Design: Run `antd info <Component> --format json` before writing component code.
 
 ### 3. EXPLORE
+
 - Inspect `src/features/` for existing feature modules.
 - Check reusable primitives in `src/components/ui/` (Shadcn) and shared hooks in `src/hooks/`.
 - Check active stores in `src/stores/` (Zustand).
 - Check existing E2E test helpers and specs in `e2e/`.
 
 ### 4. PLAN
-- Plan component breakdown in `src/features/<feature-name>/`:
+
+- Plan component breakdown in `src/features/<feature-name>/` (adaptable to **Ant Design** or **Shadcn UI**):
   - `index.tsx`: Feature Page with Context Provider.
-  - `context/index.tsx`: Feature Context & custom hook.
-  - `components/`: Modular child components (`list`, `card`, `create-form`, `delete`).
+  - `schema.ts`: Zod validation schemas & body types (Shared Core).
+  - `query.ts`: TanStack Query & Mutation options factory (`getAll`, `getOne`, `create`, `edit`, `delete`) (Shared Core).
+  - `context/index.tsx`: Feature Context (action state machine, current entity, queries/mutations) & hook (Shared Core).
+  - `components/`: Modular child components (`table.tsx`, `columns.tsx`, `actions-cell.tsx`, `modals/upsert.tsx`).
 - Plan form validation schema with Zod & React Hook Form.
 - Plan API consumption via oRPC hooks (`orpc.<router>.<method>.useQuery()`).
 - **Plan Playwright E2E test cases**: Page load, user input, form submit, error display, responsive layout, toast/notification.
 
 ### 5. IMPLEMENT
+
 - **Agent**: Sub-agent **`ui-builder`**
 - **Skills**: `ui-module`, `shadcn`, `antd`, `tanstack-router`, `zustand`, `hooks`
 - **MCP Servers**: Use `shadcn` MCP to discover/add components; use `antd` MCP for API & styling tokens.
@@ -54,6 +62,7 @@ Specialized frontend engineering workflow adhering to the mandatory 11-step qual
   - **MANDATORY**: Create Playwright E2E spec in `e2e/<feature>.spec.ts`.
 
 ### 6. TEST #1 (First Quality Gate)
+
 - Run `npm run typecheck` (`tsc --noEmit`).
 - Run `npm run lint` and `antd lint <path> --format json` (if AntD used).
 - Run unit/component tests: `npm test`.
@@ -63,17 +72,21 @@ Specialized frontend engineering workflow adhering to the mandatory 11-step qual
 - Verify all assertions pass and no unhandled browser console errors appear.
 
 ### 7. REVIEW
+
 - Verify responsiveness (Desktop, Tablet, Mobile).
 - Check empty, loading, and error states.
 - Ensure proper query invalidation on mutation success.
 
 ### 8. FIX REVIEW FINDINGS
+
 - Fix any UI glitches, missing props, styling defects, or console warnings.
 
 ### 9. SIMPLIFY
+
 - Clean up unused CSS classes, redundant re-renders, and ensure atomic Zustand selectors.
 
 ### 10. TEST #2 (BẮT BUỘC)
+
 - Re-run full check including Playwright tests via `tester-engineer`:
   ```bash
   npm run typecheck && npm run lint && npm test && npx playwright test && npm run build
@@ -82,5 +95,6 @@ Specialized frontend engineering workflow adhering to the mandatory 11-step qual
 - If failed: Fix ➔ Re-run TEST #2 until all green.
 
 ### 11. FINAL REVIEW & COMMIT
+
 - Check `git diff` for cleanliness.
 - Commit with conventional format and attribution.
