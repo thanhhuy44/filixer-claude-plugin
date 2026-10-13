@@ -9,6 +9,10 @@ Use this skill when fetching data, managing async cache, handling mutations with
 
 ## 1. Core Guidelines
 
+- **MANDATORY Documentation Lookup (`tanstack` CLI)**: For any actions involving TanStack Query, Table, or other TanStack libraries, **FORCE using `tanstack` CLI** for research/reading docs ([CLI Reference](https://tanstack.com/cli/latest/docs/cli-reference)). Do NOT rely on subjective/training knowledge:
+  - `tanstack doc query <path>` (e.g. `tanstack doc query framework/react/overview --docs-version v5 --json`)
+  - `tanstack search-docs "<query>" --library query --json`
+  - `tanstack search-docs "<query>" --library table --json`
 - **oRPC + TanStack Query**: Always use oRPC React Query integration hooks for client-side data fetching and mutation handling (`orpc.<router>.<method>.useQuery()`, `orpc.<router>.<method>.useMutation()`).
 - **Query Invalidation**: Invalidate relevant queries after successful mutations (`utils.<router>.<method>.invalidate()`).
 - **TanStack Table**: Use `@tanstack/react-table` for data grid views that require custom column sorting, pagination, or filtering.
@@ -18,22 +22,25 @@ Use this skill when fetching data, managing async cache, handling mutations with
 ### Data Fetching & Mutation with oRPC
 
 ```tsx
-import { orpc } from '@/lib/orpc'
-import { useQueryClient } from '@tanstack/react-query'
+import { orpc } from "@/lib/orpc";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const ItemList = (): React.ReactNode => {
-  const queryClient = useQueryClient()
-  const { data, isLoading, error } = orpc.item.getAll.useQuery({ page: 1, limit: 10 })
+  const queryClient = useQueryClient();
+  const { data, isLoading, error } = orpc.item.getAll.useQuery({
+    page: 1,
+    limit: 10,
+  });
 
   const deleteMutation = orpc.item.delete.useMutation({
     onSuccess: () => {
       // Invalidate query to refetch fresh data
-      orpc.item.getAll.invalidate()
+      orpc.item.getAll.invalidate();
     },
-  })
+  });
 
-  if (isLoading) return <div>Loading items...</div>
-  if (error) return <div>Error loading items</div>
+  if (isLoading) return <div>Loading items...</div>;
+  if (error) return <div>Error loading items</div>;
 
   return (
     <ul>
@@ -46,8 +53,8 @@ export const ItemList = (): React.ReactNode => {
         </li>
       ))}
     </ul>
-  )
-}
+  );
+};
 ```
 
 ### TanStack Data Table Basics
@@ -59,11 +66,11 @@ import {
   getPaginationRowModel,
   flexRender,
   type ColumnDef,
-} from '@tanstack/react-table'
+} from "@tanstack/react-table";
 
 interface Props<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
 }
 
 export const DataTable = <TData, TValue>({
@@ -75,7 +82,7 @@ export const DataTable = <TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-  })
+  });
 
   return (
     <table>
@@ -84,7 +91,10 @@ export const DataTable = <TData, TValue>({
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
               <th key={header.id}>
-                {flexRender(header.column.columnDef.header, header.getContext())}
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext(),
+                )}
               </th>
             ))}
           </tr>
@@ -102,6 +112,6 @@ export const DataTable = <TData, TValue>({
         ))}
       </tbody>
     </table>
-  )
-}
+  );
+};
 ```

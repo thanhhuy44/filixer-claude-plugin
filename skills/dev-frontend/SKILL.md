@@ -24,9 +24,8 @@ Specialized frontend engineering workflow adhering to the mandatory 11-step qual
 ### 2. RESEARCH
 
 - Check `package.json` for React version (18 vs 19), styling framework (Tailwind v4), UI libraries (Shadcn UI, Ant Design v6), and Playwright configuration (`playwright.config.ts`).
-- Use **`context7` MCP** or **`llm-reader`** agent for official docs:
-  - TanStack Query / Table: `https://tanstack.com/llms.txt`
-  - Shadcn UI: `https://ui.shadcn.com/llms.txt`
+- **TanStack Ecosystem (MANDATORY)**: Force using **`tanstack` CLI** (`tanstack doc`, `tanstack search-docs`) for TanStack Query, Router, Table ([Reference](https://tanstack.com/cli/latest/docs/cli-reference)). Do NOT rely on training data.
+- Use **`context7` MCP** or **`llm-reader`** agent for non-TanStack docs (e.g. Shadcn UI: `https://ui.shadcn.com/llms.txt`).
 - For Ant Design: Run `antd info <Component> --format json` before writing component code.
 
 ### 3. EXPLORE

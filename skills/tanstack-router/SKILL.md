@@ -9,6 +9,10 @@ Use this skill when building Single Page Applications (SPA) with `@tanstack/reac
 
 ## 1. Core Guidelines
 
+- **MANDATORY Documentation Lookup (`tanstack` CLI)**: For any actions involving TanStack Router or Start, **FORCE using `tanstack` CLI** for research/reading docs ([CLI Reference](https://tanstack.com/cli/latest/docs/cli-reference)). Do NOT rely on subjective/training knowledge:
+  - `tanstack doc router framework/react/guide/data-loading`
+  - `tanstack search-docs "<query>" --library router --framework react --json`
+  - `tanstack search-docs "server functions" --library start --json`
 - **File-Based Routing**: Use `createFileRoute('/path')` for routes in `src/routes/`.
 - **Search Parameter Validation**: Always validate URL search parameters using Zod via `validateSearch`.
 - **Type-Safety**: Leverage full type safety for `Link`, `useNavigate`, and `useParams`.
@@ -19,52 +23,52 @@ Use this skill when building Single Page Applications (SPA) with `@tanstack/reac
 ### File Route Definition (`src/routes/posts.tsx`)
 
 ```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { z } from 'zod'
+import { createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
 
 const postsSearchSchema = z.object({
   page: z.number().optional().default(1),
-  filter: z.string().optional().default(''),
-})
+  filter: z.string().optional().default(""),
+});
 
-export const Route = createFileRoute('/posts')({
+export const Route = createFileRoute("/posts")({
   validateSearch: postsSearchSchema,
   component: PostsComponent,
-})
+});
 
 function PostsComponent() {
-  const { page, filter } = Route.useSearch()
+  const { page, filter } = Route.useSearch();
 
   return (
     <div>
       <h1>Posts (Page: {page})</h1>
       {filter && <p>Filtering by: {filter}</p>}
     </div>
-  )
+  );
 }
 ```
 
 ### Route with Data Loader (`src/routes/posts/$postId.tsx`)
 
 ```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { orpcClient } from '@/lib/orpc'
+import { createFileRoute } from "@tanstack/react-router";
+import { orpcClient } from "@/lib/orpc";
 
-export const Route = createFileRoute('/posts/$postId')({
+export const Route = createFileRoute("/posts/$postId")({
   loader: async ({ params }) => {
-    return await orpcClient.posts.getById({ id: params.postId })
+    return await orpcClient.posts.getById({ id: params.postId });
   },
   component: PostDetailComponent,
-})
+});
 
 function PostDetailComponent() {
-  const post = Route.useLoaderData()
+  const post = Route.useLoaderData();
 
   return (
     <article>
       <h1>{post.title}</h1>
       <p>{post.content}</p>
     </article>
-  )
+  );
 }
 ```

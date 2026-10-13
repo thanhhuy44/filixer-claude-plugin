@@ -1,6 +1,6 @@
 ---
-name: workflow
-description: Universal rigorous development workflow (FE, BE, Fullstack) following the mandatory 11-step lifecycle (Research -> Explore -> Plan -> Implement -> Test #1 -> Review -> Fix -> Simplify -> Test #2 -> Final Review -> Commit). MANDATES Playwright E2E tests for any UI-related task.
+name: task-runner
+description: Universal rigorous development workflow (FE, BE, Fullstack) following the mandatory 11-step lifecycle (Research -> Explore -> Plan -> Implement -> Test #1 -> Review -> Fix -> Simplify -> Test #2 -> Final Review -> Commit). MANDATES fetching latest docs via MCP/agents before implementation. MANDATES Playwright E2E tests for any UI-related task.
 ---
 
 # Universal Development Workflow (FE / BE / Fullstack)
@@ -8,18 +8,33 @@ description: Universal rigorous development workflow (FE, BE, Fullstack) followi
 This skill enforces a disciplined, multi-phase development lifecycle for any engineering task.
 
 The workflow accepts an optional mode argument `$ARGUMENTS`:
+
 - **`fe` / `frontend`**: Frontend-only track (UI, Components, Routing, Client State)
 - **`be` / `backend`**: Backend-only track (Database Schemas, Migrations, oRPC APIs, Auth)
-- **`fullstack`** *(Default)*: End-to-end fullstack track (Database ➔ API ➔ UI ➔ E2E QA)
+- **`fullstack`** _(Default)_: End-to-end fullstack track (Database ➔ API ➔ UI ➔ E2E QA)
 
 ---
 
 ## 🚨 MANDATORY EXECUTION RULES
 
-1. **MANDATORY DATABASE RULE (`db-architect`)**:
+1. **MANDATORY DOC-FETCH RULE (No Subjective Knowledge)**:
+   - Agents MUST NOT rely on training data or subjective knowledge for any library, framework, API, or tool usage. **Every** implementation decision involving external libraries MUST be backed by freshly fetched documentation:
+     - **`tanstack` CLI** (FORCE / MANDATORY for TanStack ecosystem — Router, Query, Start, Form, Table, Store, Virtual — Reference: [TanStack CLI Reference](https://tanstack.com/cli/latest/docs/cli-reference)): **Must use `tanstack` CLI first** for research/reading docs instead of relying on memory or other tools. Run via Bash:
+       - `tanstack doc <library> <path>` — Fetch a specific doc page (e.g. `tanstack doc router framework/react/guide/data-loading`, `tanstack doc query framework/react/overview --docs-version v5 --json`).
+       - `tanstack search-docs "<query>" --library <id>` — Search docs (e.g. `tanstack search-docs "server functions" --library start`, `tanstack search-docs loaders --library router --framework react --json`).
+       - `tanstack libraries --json` — List all available libraries and IDs.
+       - Add `--json` for machine-parsable JSON output; use `--docs-version <version>` to pin release version.
+     - **`context7` MCP**: Call `mcp_context7_resolve_library_id` → `mcp_context7_query_docs` for **non-TanStack** libraries (React, oRPC, Better-Auth, Drizzle, Shadcn, Tailwind, etc.).
+     - **Sub-agent `llm-reader`**: Dispatch to discover and fetch `llms.txt` or official documentation instruction files when other sources lack coverage.
+     - **`WebSearch` / `WebFetch`**: Fallback when other sources yield no results.
+     - **`antd` MCP**: Call `antd_info` / `antd_doc` / `antd_token` before writing any Ant Design code.
+     - **`shadcn` MCP**: Query component registry before using Shadcn components.
+   - **Violation**: Writing library code based solely on training knowledge without a prior doc-fetch step in the same session is a workflow violation and must be flagged for re-verification.
+
+2. **MANDATORY DATABASE RULE (`db-architect`)**:
    - Whenever a task requires **creating, editing, or migrating database tables, schemas, relations, seed data, or running `drizzle-kit` commands**, you **MUST explicitly delegate to sub-agent `db-architect`** via `Agent` tool (`Agent({ subagent_type: 'db-architect', prompt: '...' })`).
 
-2. **MANDATORY UI RULE (`tester-engineer` + Playwright)**:
+3. **MANDATORY UI RULE (`tester-engineer` + Playwright)**:
    - Whenever a task creates, modifies, or refactors a UI component, page, form, or route, you **MUST author corresponding Playwright E2E tests** (in `e2e/<feature>.spec.ts` or `tests/e2e/<feature>.spec.ts`) and **MUST invoke sub-agent `tester-engineer`** to execute and verify them. A UI task is **INCOMPLETE** without working Playwright test coverage and verified passing test run.
 
 ---
@@ -36,7 +51,8 @@ The workflow accepts an optional mode argument `$ARGUMENTS`:
 ┌─────────────────────────────────────────────────────────────┐
 │                         2. RESEARCH                         │
 │  ├─ Check package.json & installed library versions         │
-│  ├─ Sub-agent `llm-reader` / `context7` for llms.txt & docs │
+│  ├─ Force TanStack CLI (doc, search-docs) for TanStack libs │
+│  ├─ context7 MCP (non-TanStack) / llm-reader (llms.txt)     │
 │  ├─ Review official changelogs & breaking changes           │
 │  └─ Inspect existing codebase patterns & idioms             │
 └──────────────────────────────┬──────────────────────────────┘
@@ -127,6 +143,7 @@ The workflow accepts an optional mode argument `$ARGUMENTS`:
 ## 📋 Step-by-Step Execution Guide
 
 ### Step 1: TASK Analysis & Scope Selection
+
 - Identify track from input `$ARGUMENTS` or user request:
   - **FE Only**: UI components, pages, forms, client routing, global state.
   - **BE Only**: Database tables, migrations, RPC procedures, auth middlewares.
@@ -135,19 +152,32 @@ The workflow accepts an optional mode argument `$ARGUMENTS`:
 
 ---
 
-### Step 2: RESEARCH
-Gather accurate context before writing any code:
+### Step 2: RESEARCH (🚫 NO SUBJECTIVE KNOWLEDGE — ALWAYS FETCH DOCS)
+
+Gather accurate, up-to-date context before writing any code. **DO NOT** rely on training data — always verify via live doc sources:
+
 1. **Installed Versions**: Read `package.json` to verify framework versions (React 18/19 SPA / TanStack Start, TanStack Query/Router, oRPC, Drizzle, Shadcn UI, AntD, Better-Auth, Playwright).
-2. **Official llms.txt & Docs**:
-   - Spawn sub-agent **`llm-reader`** or query **`context7` MCP** (`mcp_context7_resolve_library_id` ➔ `mcp_context7_query_docs`).
-   - For Ant Design: Run `antd info <Component> --format json` or use `antd` MCP.
-   - For Shadcn: Use `shadcn` MCP to discover components.
-3. **Changelogs**: Check for breaking changes or deprecations.
+2. **Fetch Latest Documentation (MANDATORY for every library involved)**:
+   - **`tanstack` CLI** (FORCE / MANDATORY for TanStack ecosystem — Router, Query, Start, Form, Table, Store, Virtual — Docs: [CLI Reference](https://tanstack.com/cli/latest/docs/cli-reference)): **Must use `tanstack` CLI first** for research/reading docs instead of relying on memory or other tools. Run via Bash:
+     - `tanstack doc <library> <path>` — Fetch a specific doc page (e.g. `tanstack doc router framework/react/guide/data-loading`, `tanstack doc query framework/react/overview --docs-version v5 --json`).
+     - `tanstack search-docs "<query>" --library <id>` — Search docs (e.g. `tanstack search-docs "loaders" --library router --framework react --json`, `tanstack search-docs "server functions" --library start`).
+     - `tanstack libraries --json` — List available libraries and IDs.
+     - `tanstack ecosystem --library <id> --json` — List ecosystem recommendations.
+     - Add `--json` for machine-parsable output; use `--docs-version <version>` to pin release version.
+   - **`context7` MCP**: Call `mcp_context7_resolve_library_id` → `mcp_context7_query_docs` for **non-TanStack** libraries (React, oRPC, Better-Auth, Drizzle, Shadcn, Tailwind, etc.).
+   - **Sub-agent `llm-reader`**: Dispatch to discover and fetch `llms.txt` or official documentation instruction files when other sources lack coverage or for bleeding-edge features.
+   - **`WebSearch` / `WebFetch`**: Fallback when other sources yield no results — fetch directly from official docs sites.
+   - **`antd` MCP**: Call `antd_info` / `antd_doc` / `antd_token` / `antd_semantic` before writing any Ant Design code.
+   - **`shadcn` MCP**: Query component registry via `mcp_shadcn_view_items_in_registries` / `mcp_shadcn_search_items_in_registries` before using Shadcn components.
+3. **Changelogs**: Check for breaking changes or deprecations via `mcp_antd_antd_changelog` or library release notes.
 4. **Current Patterns**: Search codebase (`Grep`/`Glob`) to match existing project conventions.
+
+> ⚠️ **VIOLATION CHECK**: If you proceed to Step 5 (IMPLEMENT) without completing doc-fetch for every external library involved, it is a workflow violation. All library code must be verified against freshly fetched documentation.
 
 ---
 
 ### Step 3: EXPLORE
+
 - Map relevant files, types, entities, and components using `Glob` and `Read`.
 - Check available shared resources:
   - Custom Hooks: `src/hooks/` (`useAuth`, `useDebounce`, `useIsMobile`, `useDisclosure`, `useCopyToClipboard`).
@@ -160,7 +190,9 @@ Gather accurate context before writing any code:
 ---
 
 ### Step 4: PLAN
+
 Create a concise, structured implementation plan:
+
 - Outline exact file paths to create or modify.
 - Detail data contracts (Zod schemas, types, Drizzle entities, oRPC procedures).
 - Detail UI component hierarchy and state flow.
@@ -169,9 +201,11 @@ Create a concise, structured implementation plan:
 ---
 
 ### Step 5: IMPLEMENT
+
 Execute implementation using specialized sub-agents and skills:
 
 #### Option A: Frontend Track (`fe`)
+
 - **Agent**: `ui-builder`
 - **Skills**: `ui-module`, `shadcn`, `antd`, `tanstack-router`, `zustand`, `hooks`
 - **Rules**:
@@ -182,6 +216,7 @@ Execute implementation using specialized sub-agents and skills:
   - **MANDATORY**: Author Playwright E2E spec in `e2e/<feature-name>.spec.ts` covering the new UI flow.
 
 #### Option B: Backend Track (`be`)
+
 - **Agents**:
   - **`db-architect` (MUST DELEGATE for DB tasks)**: Create/edit schemas in `src/db/schema/<entity>.ts`, configure `relations`, export `drizzle-zod` schemas, and run `drizzle-kit generate/migrate`.
   - **`orpc-developer`**: Build oRPC routers in `src/orpc/router/<router>.ts` (`commands/crud-rpc.md`), `publicProcedure` / `protectedProcedure` with strict Zod input/output schemas.
@@ -189,6 +224,7 @@ Execute implementation using specialized sub-agents and skills:
 - **Commands**: `/drizzle-schema`, `/crud-rpc`, `/auth-setup`.
 
 #### Option C: Fullstack Track (`fullstack`)
+
 - Follow sequential assembly:
   1. **Database Layer (MUST DELEGATE to `db-architect`)**: Drizzle schema in `src/db/schema/` ➔ `drizzle-zod` ➔ `drizzle-kit` migration.
   2. **API Layer (`orpc-developer`)**: oRPC router ➔ procedures ➔ root router export.
@@ -198,7 +234,9 @@ Execute implementation using specialized sub-agents and skills:
 ---
 
 ### Step 6: TEST #1 (First Quality Gate)
+
 Run the initial verification suite via Bash:
+
 1. **Typecheck**: `bun run typecheck` or `npx tsc --noEmit`
 2. **Lint**: `bun run lint` or `npm run lint` (plus `antd lint` if AntD components were touched)
 3. **Unit / Integration**: `bun test` or `npm test`
@@ -211,7 +249,9 @@ Run the initial verification suite via Bash:
 ---
 
 ### Step 7: MULTI-AXIS REVIEW
+
 Review the changes across 4 core axes:
+
 - **Correctness**: Are functional requirements met? Are contracts and types aligned?
 - **Edge Cases**: Empty states, error boundaries, network retries, null checks.
 - **Security**: Authentication verification, authorization middleware, input sanitization, no exposed secrets.
@@ -220,35 +260,42 @@ Review the changes across 4 core axes:
 ---
 
 ### Step 8: FIX REVIEW FINDINGS
+
 - Resolve all defects, warnings, or gaps found during Step 7.
 - Re-verify code consistency with the project style guide.
 
 ---
 
 ### Step 9: SIMPLIFY
+
 - Clean up dead code, redundant wrappers, unused imports, and verbose comments.
 - Ensure code is lean, readable, and maintainable.
 
 ---
 
 ### Step 10: TEST #2 (MANDATORY QUALITY GATE)
+
 **BẮT BUỘC** re-run all validation steps:
+
 ```bash
 # Must run full validation including Playwright tests
 npm run typecheck && npm run lint && npm test && npx playwright test && npm run build
 ```
+
 - For UI changes, re-invoke **`tester-engineer`** to confirm that regression tests pass and all bugs in `BUG.md` are resolved.
 - **If any test fails**: Diagnose root cause ➔ Fix ➔ Re-run Step 10 until 100% green.
 
 ---
 
 ### Step 11: FINAL REVIEW
+
 - Run `git diff` to review all staged and unstaged changes.
 - Ensure no accidental edits, unwanted files, or debugging logs are left.
 
 ---
 
 ### Step 12: COMMIT
+
 - Create a clean Git commit using Conventional Commits format:
   ```bash
   git add <files>

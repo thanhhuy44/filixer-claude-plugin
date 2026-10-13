@@ -8,17 +8,17 @@ This repository is the official **Filixer Fullstack Plugin** for Claude Code, eq
 
 When handling tasks, agents must route actions to the appropriate specialized sub-agents, skills, or MCP tools:
 
-| Task Type                         | Primary Sub-Agent | Relevant Skill (`Skill` tool)                              | MCP Server / Tooling                | Slash Command                                  |
-| :-------------------------------- | :---------------- | :--------------------------------------------------------- | :---------------------------------- | :--------------------------------------------- |
-| **Unified Development Lifecycle** | Orchestrator      | `workflow`, `dev-fullstack`, `dev-frontend`, `dev-backend` | `context7`, `playwright`            | `/filixer:workflow`                            |
-| **Database & Schema**             | `db-architect`    | `drizzle`                                                  | -                                   | `/drizzle-schema`                              |
-| **Backend & APIs**                | `orpc-developer`  | `tanstack` (Query oRPC)                                    | -                                   | `/crud-rpc`, `/auth-setup`                     |
-| **Feature UI & Forms**            | `ui-builder`      | `ui-module`, `shadcn`, `antd`                              | `shadcn`, `antd`                    | `/feature-ui`, `/form-zod`, `/feature-auth-ui` |
-| **SPA Routing**                   | `ui-builder`      | `tanstack-router`                                          | -                                   | `/spa-route`, `/spa-auth-client`               |
-| **Global State**                  | `ui-builder`      | `zustand`                                                  | -                                   | -                                              |
-| **Custom Hooks**                  | `ui-builder`      | `hooks`                                                    | -                                   | -                                              |
-| **Testing & QA**                  | `tester-engineer` | -                                                          | `playwright`                        | -                                              |
-| **Docs & Official LLM Specs**     | `llm-reader`      | -                                                          | `context7`, `WebSearch`, `WebFetch` | -                                              |
+| Task Type                         | Primary Sub-Agent | Relevant Skill (`Skill` tool)                                 | MCP Server / Tooling                | Slash Command                                  |
+| :-------------------------------- | :---------------- | :------------------------------------------------------------ | :---------------------------------- | :--------------------------------------------- |
+| **Unified Development Lifecycle** | Orchestrator      | `task-runner`, `dev-fullstack`, `dev-frontend`, `dev-backend` | `context7`, `playwright`            | `/filixer:task-runner`                         |
+| **Database & Schema**             | `db-architect`    | `drizzle`                                                     | -                                   | `/drizzle-schema`                              |
+| **Backend & APIs**                | `orpc-developer`  | `tanstack` (Query oRPC)                                       | `tanstack` CLI                      | `/crud-rpc`, `/auth-setup`                     |
+| **Feature UI & Forms**            | `ui-builder`      | `ui-module`, `shadcn`, `antd`                                 | `shadcn`, `antd`                    | `/feature-ui`, `/form-zod`, `/feature-auth-ui` |
+| **SPA Routing**                   | `ui-builder`      | `tanstack-router`                                             | `tanstack` CLI                      | `/spa-route`, `/spa-auth-client`               |
+| **Global State**                  | `ui-builder`      | `zustand`                                                     | -                                   | -                                              |
+| **Custom Hooks**                  | `ui-builder`      | `hooks`                                                       | -                                   | -                                              |
+| **Testing & QA**                  | `tester-engineer` | -                                                             | `playwright`                        | -                                              |
+| **Docs & Official LLM Specs**     | `llm-reader`      | -                                                             | `context7`, `WebSearch`, `WebFetch` | -                                              |
 
 ---
 
@@ -46,17 +46,46 @@ TASK ──► RESEARCH ──► EXPLORE ──► PLAN ──► IMPLEMENT ─
 
 ---
 
-## 🛠️ MCP Servers Usage Rules
+## 🚫 Mandatory: No Subjective Knowledge — Always Fetch Latest Docs
 
-1. **`antd`** (`@ant-design/cli`):
+Agents MUST NOT rely on training data or subjective knowledge for any library, framework, API, or tool usage. **Every** implementation decision involving external libraries must be backed by freshly fetched documentation:
+
+1. **TanStack CLI** (MANDATORY for TanStack ecosystem): For any task involving TanStack libraries (Router, Query, Start, Form, Table, Store, Virtual), **always use `tanstack` CLI first** to fetch docs:
+   - `tanstack doc <library> <path>` — Fetch a specific documentation page (e.g. `tanstack doc router framework/react/guide/data-loading`).
+   - `tanstack search-docs "<query>" --library <id>` — Search across TanStack docs (e.g. `tanstack search-docs "server functions" --library start`).
+   - `tanstack libraries` — List all TanStack libraries and their IDs.
+   - Add `--json` flag for machine-parsable output. Use `--docs-version <version>` to target a specific release.
+   - **This takes priority over `context7` and `llm-reader`** for all TanStack-related documentation lookups.
+2. **MCP `context7`**: Always call `mcp_context7_resolve_library_id` → `mcp_context7_query_docs` to fetch current API syntax, props, configuration, and usage patterns for **non-TanStack** external libraries.
+3. **Sub-agent `llm-reader`**: Dispatch to discover and fetch `llms.txt` or official documentation instruction files from library websites when `context7` lacks coverage or when verifying bleeding-edge features.
+4. **`WebSearch` / `WebFetch`**: Use as fallback when neither `context7` nor `llm-reader` yields results — fetch directly from official docs sites.
+5. **MCP `antd`**: Always query `antd_info` / `antd_doc` / `antd_token` before writing any Ant Design code.
+6. **MCP `shadcn`**: Always query component registry before using Shadcn components.
+
+**Violations**: Writing library code based solely on training knowledge without fetching docs is a workflow violation. If an agent produces code using a library API without a prior doc-fetch step in the same session, the code must be flagged for re-verification.
+
+**Applies to**: All sub-agents (`db-architect`, `orpc-developer`, `ui-builder`, `tester-engineer`) and the orchestrator. The RESEARCH step (Step 2) of the 11-step workflow enforces this — it is not optional.
+
+---
+
+## 🛠️ MCP Servers & CLI Tools Usage Rules
+
+1. **`tanstack` CLI** (MANDATORY for TanStack ecosystem):
+   - **Must use for ALL TanStack-related doc lookups** (Router, Query, Start, Form, Table, Store, Virtual). Takes priority over `context7` for TanStack libraries.
+   - `tanstack doc <library> <path>` — Fetch a specific doc page (e.g. `tanstack doc router framework/react/guide/data-loading`).
+   - `tanstack search-docs "<query>" --library <id>` — Search docs (e.g. `tanstack search-docs "server functions" --library start`).
+   - `tanstack libraries --json` — List available libraries and IDs.
+   - `tanstack ecosystem --library <id> --json` — List ecosystem partner recommendations.
+   - Always add `--json` for machine-parsable output when processing results programmatically.
+2. **`antd`** (`@ant-design/cli`):
    - Always query component API props/tokens before writing Ant Design code (`antd info <Component> --format json`).
    - Use `antd lint <path> --format json` to verify changes.
-2. **`shadcn`** (`shadcn@latest mcp`):
+3. **`shadcn`** (`shadcn@latest mcp`):
    - Use for component lookup, schema verification, and registry installation (`npx -y shadcn@latest add <component>`).
-3. **`playwright`** (`@playwright/mcp@latest`):
+4. **`playwright`** (`@playwright/mcp@latest`):
    - Used by `tester-engineer` for browser navigation, snapshot verification, console error detection, and visual regression.
-4. **`context7`**:
-   - Use `mcp_context7_resolve_library_id` and `mcp_context7_query_docs` to fetch up-to-date documentation for React, TanStack Start/Router, oRPC, Better-Auth, Drizzle, Shadcn, and Tailwind.
+5. **`context7`**:
+   - Use `mcp_context7_resolve_library_id` and `mcp_context7_query_docs` to fetch up-to-date documentation for **non-TanStack** libraries (React, oRPC, Better-Auth, Drizzle, Shadcn, Tailwind, etc.).
 
 ---
 

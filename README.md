@@ -10,7 +10,7 @@ A comprehensive fullstack development toolkit for Claude Code, empowering rapid 
 
 The plugin provides a unified development workflow skill and specialized domain skills following an 11-step lifecycle:
 
-- **`/filixer:workflow [fe|be|fullstack]`**: Universal master workflow skill with options for Frontend-only, Backend-only, or Fullstack.
+- **`/filixer:task-runner [fe|be|fullstack]`**: Universal master development workflow skill with options for Frontend-only, Backend-only, or Fullstack.
 - **`/filixer:dev-frontend`**: Frontend development workflow with UI Builder, Shadcn UI, Ant Design, TanStack Router/Query, Zustand, and Playwright.
 - **`/filixer:dev-backend`**: Backend development workflow with DB Architect, oRPC Developer, Drizzle ORM, and Better-Auth.
 - **`/filixer:dev-fullstack`**: End-to-end fullstack development workflow coordinating the entire lifecycle from DB to UI and QA.
@@ -56,11 +56,10 @@ The plugin bundles TypeScript / JavaScript Language Server (`typescript-language
 
 ## 🛠️ Skills
 
-- **`workflow`**: Universal 11-step development workflow (`fe`, `be`, `fullstack`).
+- **`task-runner`**: Universal 11-step development workflow (`fe`, `be`, `fullstack`).
 - **`dev-frontend`**: Specialized Frontend development workflow.
 - **`dev-backend`**: Specialized Backend development workflow.
 - **`dev-fullstack`**: Specialized Fullstack development workflow.
-- **`filixer`**: Core architecture guidelines and task routing matrix.
 - **`ui-module`**: Standards & templates for feature-driven UI modules (`src/features/`), adaptable for Ant Design and Shadcn UI.
 - **`antd`**: Decision guide & offline CLI workflow for Ant Design v6, Pro, and AntD X.
 - **`drizzle`**: Database schema design, `relations`, `drizzle-kit` migrations, and `drizzle-zod`.
